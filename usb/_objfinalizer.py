@@ -48,7 +48,7 @@ class _AutoFinalizedObjectBase(object):
         """
         pass
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(self, *args, **kwargs):
         """Creates a new object instance and adds the private finalizer
         attributes to it.
 
@@ -57,7 +57,7 @@ class _AutoFinalizedObjectBase(object):
         Arguments:
         * *args, **kwargs -- ignored
         """
-        instance = super(_AutoFinalizedObjectBase, cls).__new__(cls)
+        instance = super(_AutoFinalizedObjectBase, self).__new__(self)
         instance._finalize_called = False
         return instance
 
@@ -106,7 +106,7 @@ if sys.hexversion >= 0x3040000:
 
     class AutoFinalizedObject(_AutoFinalizedObjectBase):
 
-        def __new__(cls, *args, **kwargs):
+        def __new__(self, *args, **kwargs):
             """Creates a new object instance and adds the private finalizer
             attributes to it.
 
@@ -129,9 +129,7 @@ if sys.hexversion >= 0x3040000:
             #
             # Note 3: the _finalize_called attribute is (probably) useless
             #         for this class
-            instance = super(AutoFinalizedObject, cls).__new__(
-                cls, *args, **kwargs
-            )
+            instance = super(AutoFinalizedObject, self).__new__(self, *args, **kwargs)
 
             instance._finalizer = weakref.finalize(
                 instance, _do_finalize_object_ref, weakref.ref(instance)
